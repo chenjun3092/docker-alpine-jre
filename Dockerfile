@@ -1,5 +1,21 @@
 FROM alpine:3.3
 
+# change timezone to Asia/Shanghai
+RUN apk add --no-cache tzdata && \
+    cp  /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime && \
+    echo "Asia/Shanghai" >  /etc/timezone && \
+    apk del --no-cache tzdata
+
+# add bash and libc6-compat
+RUN apk add --no-cache bash libc6-compat && \
+    ln -s /lib /lib64 && \
+    sed -i -e "s/bin\/ash/bin\/bash/" /etc/passwd
+
+
+# add rain user and group (addgroup -g 200 -S rain)
+RUN sed -i -r 's/nofiles/rain/' /etc/group && \
+    adduser -u 200 -D -S -G rain rain
+
 ENV LANG C.UTF-8
 
 # add a simple script that can auto-detect the appropriate JAVA_HOME value
