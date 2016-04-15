@@ -26,7 +26,7 @@ RUN set -x \
     && rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc \
     && chmod +x /usr/local/bin/gosu \
     && gosu nobody true \
-    && apk del .gosu-deps
+    && apk del --no-cache .gosu-deps
 
 # add rain user and group (addgroup -g 200 -S rain)
 RUN sed -i -r 's/nofiles/rain/' /etc/group && \
